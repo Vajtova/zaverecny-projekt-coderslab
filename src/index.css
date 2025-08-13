@@ -1,2 +1,15 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+
+/* Skrytí šipek v input type="number" pro Chrome, Safari, Edge */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Skrytí šipek pro Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
