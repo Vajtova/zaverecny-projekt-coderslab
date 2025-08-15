@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { act, useState } from "react";
 import logo from '../assets/logo.png';
+
+import { getJidelnicek } from "../ai"; 
 
 export default function Calculator() {
   const [gender, setGender] = useState("");
@@ -10,7 +12,9 @@ export default function Calculator() {
   const [goal, setGoal] = useState("");
   const [result, setResult] = useState(null);
 
-  const handleCalculate = () => {
+  const [jidelnicek, setJidelnicek] = useState(null);
+
+  const handleCalculate = async() => {
     if (!gender || !age || !height || !weight || !goal) {
       alert("Vyplňte všechna pole.");
       return;
@@ -59,6 +63,19 @@ export default function Calculator() {
       carbs_g: Math.round(carbs_g),
       carbs_kcal: Math.round(carbs_kcal),
     });
+
+    setJidelnicek(await getJidelnicek({
+        pohlavi: gender,
+        vek: age,
+        vyska: height,
+        vaha: weight,
+        aktivita: activity,
+        cil: goal,  
+        kalorie: protein_kcal + fat_kcal + carbs_kcal,
+        bilkoviny: protein_g,
+        sacharidy: carbs_g,
+        tuky: fat_g,
+    }));
   };
 
   const handleReset = () => {
@@ -226,6 +243,97 @@ export default function Calculator() {
                 <p>🍚 Sacharidy: {result.carbs_g} g ({result.carbs_kcal} kcal)</p>
               </div>
             </div>
+
+            {/* Jídelníček */}
+            {jidelnicek === null ? (
+              <p className="mt-4 text-center text-base-content">Načítám jídelníček...</p>
+            ) : (
+              <div className="mt-6 card bg-base-100 shadow p-6 w-full">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  🥗 Jídelníček na den
+                </h3>
+
+                {/* Snídaně */}
+                <div className="mb-4 border-b border-base-300 pb-4">
+                  <h4 className="text-md font-semibold mb-1">🍳 Snídaně</h4>
+                  <p className="text-sm text-gray-500 mb-2">
+                    Kalorie: <span className="text-primary font-medium">{jidelnicek.snidane.kalorie}</span>
+                  </p>
+                  <ul className="list-disc list-inside space-y-1">
+                    {jidelnicek.snidane.jidla.map((jidlo, index) => (
+                      <li key={index} className="text-sm">
+                        <strong>{jidlo.nazev}</strong> – {jidlo.ziviny}{" "}
+                        <span className="italic text-gray-500">({jidlo.popis})</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Dopolední svačina */}
+                <div className="mb-4 border-b border-base-300 pb-4">
+                  <h4 className="text-md font-semibold mb-1">🍓 Dopolední svačina</h4>
+                  <p className="text-sm text-gray-500 mb-2">
+                    Kalorie: <span className="text-primary font-medium">{jidelnicek.svacina.kalorie}</span>
+                  </p>
+                  <ul className="list-disc list-inside space-y-1">
+                    {jidelnicek.svacina.jidla.map((jidlo, index) => (
+                      <li key={index} className="text-sm">
+                        <strong>{jidlo.nazev}</strong> – {jidlo.ziviny}{" "}
+                        <span className="italic text-gray-500">({jidlo.popis})</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Oběd */}
+                <div className="mb-4 border-b border-base-300 pb-4">
+                  <h4 className="text-md font-semibold mb-1">🥗 Oběd</h4>
+                  <p className="text-sm text-gray-500 mb-2">
+                    Kalorie: <span className="text-primary font-medium">{jidelnicek.obed.kalorie}</span>
+                  </p>
+                  <ul className="list-disc list-inside space-y-1">
+                    {jidelnicek.obed.jidla.map((jidlo, index) => (
+                      <li key={index} className="text-sm">
+                        <strong>{jidlo.nazev}</strong> – {jidlo.ziviny}{" "}
+                        <span className="italic text-gray-500">({jidlo.popis})</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Odpolední svačina */}
+                <div className="mb-4 border-b border-base-300 pb-4">
+                  <h4 className="text-md font-semibold mb-1">🧀 Odpolední svačina</h4>
+                  <p className="text-sm text-gray-500 mb-2">
+                    Kalorie: <span className="text-primary font-medium">{jidelnicek.svacina2.kalorie}</span>
+                  </p>
+                  <ul className="list-disc list-inside space-y-1">
+                    {jidelnicek.svacina2.jidla.map((jidlo, index) => (
+                      <li key={index} className="text-sm">
+                        <strong>{jidlo.nazev}</strong> – {jidlo.ziviny}{" "}
+                        <span className="italic text-gray-500">({jidlo.popis})</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Večeře */}
+                <div className="mb-4 border-b border-base-300 pb-4">
+                  <h4 className="text-md font-semibold mb-1">🍛 Večeře</h4>
+                  <p className="text-sm text-gray-500 mb-2">
+                    Kalorie: <span className="text-primary font-medium">{jidelnicek.vecere.kalorie}</span>
+                  </p>
+                  <ul className="list-disc list-inside space-y-1">
+                    {jidelnicek.vecere.jidla.map((jidlo, index) => (
+                      <li key={index} className="text-sm">
+                        <strong>{jidlo.nazev}</strong> – {jidlo.ziviny}{" "}
+                        <span className="italic text-gray-500">({jidlo.popis})</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
 
             {/* Tlačítko resetu */}
             <button
