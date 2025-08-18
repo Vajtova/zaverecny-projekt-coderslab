@@ -104,11 +104,11 @@ export default function Calculator() {
         <main className="flex flex-col items-center w-full max-w-xl p-4 font-light">
 
 
-        <div className="text-center my-6 text-xl font-semibold">
+        <div className="text-center my-6 text-xl font-semibold no-print">
           Jdu na to 🧮🥗
         </div>
 
-        <div className="card w-full bg-base-100 shadow p-6">
+        <div className="card w-full bg-base-100 shadow p-6 calculator-form">
           {/* Pohlaví */}
           <div className="flex justify-around mb-4">
             <label className="label cursor-pointer">
@@ -250,7 +250,7 @@ export default function Calculator() {
             ) : (
               <div className="mt-6 card bg-base-100 shadow p-6 w-full">
                 <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                  🥗 Jídelníček na den
+                  🥗 Ukázkový jídelníček na den
                 </h3>
 
                 {/* Snídaně */}
@@ -334,6 +334,16 @@ export default function Calculator() {
                 </div>
               </div>
             )}
+
+            {/* Tlačítko tisk */}
+            <button
+              type="button"
+              className="btn btn-secondary w-full mt-4 no-print"
+              onClick={() => window.print()}
+>
+              🖨️ Vytisknout výsledky a jídelníček
+            </button>
+
 
             {/* Tlačítko resetu */}
             <button

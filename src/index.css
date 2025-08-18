@@ -13,3 +13,33 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+/* Tisk */
+@media print {
+  header,
+  footer,
+  .calculator-form, 
+  .btn,
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .card {
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .min-h-screen {
+    min-height: auto !important;
+  }
+
+  main {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+}
